@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 export const Manager = () => {
   const [form, setForm] = useState({
@@ -9,6 +10,7 @@ export const Manager = () => {
   });
 
   const passwordRef = useRef(null);
+
   const showPassword = () => {
     if (passwordRef.current.type === "password") {
       passwordRef.current.type = "text";
@@ -31,16 +33,91 @@ export const Manager = () => {
     // Set the form state with the new values entered by the user in the input fields
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const isButtonDisabled =
+    !form.site.trim() || !form.username.trim() || !form.password.trim();
 
   const savePassword = () => {
-    // Save the new password to the passwordArray state and also save it to local storage
-    setPasswordArray([...passwordArray, form]);
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
-    console.log([...passwordArray, form]);
+    // 1. Double-check for empty fields (though your button is disabled, this keeps it safe)
+    if (
+      form.site.trim() === "" ||
+      form.username.trim() === "" ||
+      form.password.trim() === ""
+    ) {
+      toast.error(`Please fill in all fields before saving!`, {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      return;
+    }
+
+    // 2. Check if the site and username combination already exists
+    const isDuplicate = passwordArray.some(
+      (item) =>
+        item.site.toLowerCase().trim() === form.site.toLowerCase().trim() &&
+        item.username.toLowerCase().trim() ===
+          form.username.toLowerCase().trim(),
+    );
+
+    if (isDuplicate) {
+      toast.error(
+        `An account for ${form.username} on ${form.site} already exists!`,
+        {
+          position: "bottom-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        },
+      );
+      return; // Exit early to stop execution and prevent saving
+    }
+
+    // 3. Save the unique password entry if no duplicate is found
+    const updatedArray = [...passwordArray, form];
+    setPasswordArray(updatedArray);
+    localStorage.setItem("passwords", JSON.stringify(updatedArray));
+
+    // 4. Optional: Reset the form fields after a successful save
+    setForm({ site: "", username: "", password: "" });
   };
 
+  const copyText = (text) => {
+    // Copy the text to the clipboard
+    navigator.clipboard.writeText(text);
+    toast("Copied to Clipboard!", {
+      position: "bottom-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
   return (
     <div className="h-full w-full">
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="absolute inset-0 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#002_40%,#63e_100%)]">
         <div className="mx-auto text-gray-300 bg-slate-900 max-w-3xl py-5 rounded-xl mb-10">
           <div className="mx-auto flex flex-col items-center gap-2 p-2">
@@ -99,11 +176,16 @@ export const Manager = () => {
           </div>
           <button
             onClick={savePassword}
-            className="flex items-center gap-2 bg-blue-500 text-gray-200 rounded-full px-6 py-2 mx-auto hover:bg-blue-600 border-2 border-blue-600 transition-all duration-300"
+            disabled={isButtonDisabled}
+            className={`flex items-center gap-2 bg-blue-600 text-gray-200 rounded-full px-6 py-2 mx-auto border-2 border-blue-700 transition-all duration-300 ${
+              isButtonDisabled
+                ? "opacity-70 cursor-not-allowed border-blue-500 bg-blue-500"
+                : "opacity-100 cursor-pointer hover:bg-blue-700 hover:border-blue-800 active:scale-95"
+            }`}
           >
             <lord-icon
               src="https://cdn.lordicon.com/tsrgicte.json"
-              trigger="hover"
+              trigger={isButtonDisabled ? "false" : "hover"}
             ></lord-icon>
             <span>Add Password</span>
           </button>
@@ -149,6 +231,7 @@ export const Manager = () => {
                             {item.username}
                             <div className="cursor-pointer inline-block ml-2">
                               <lord-icon
+                                onClick={() => copyText(item.username)}
                                 className="invert w-6 h-6"
                                 src="https://cdn.lordicon.com/cfkiwvcc.json"
                                 trigger="hover"
@@ -159,6 +242,7 @@ export const Manager = () => {
                             {item.password}
                             <div className="cursor-pointer inline-block ml-2">
                               <lord-icon
+                                onClick={() => copyText(item.password)}
                                 className="invert w-6 h-6"
                                 src="https://cdn.lordicon.com/cfkiwvcc.json"
                                 trigger="hover"
