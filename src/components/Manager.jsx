@@ -85,6 +85,16 @@ export const Manager = () => {
     const updatedArray = [...passwordArray, form];
     setPasswordArray(updatedArray);
     localStorage.setItem("passwords", JSON.stringify(updatedArray));
+    toast.success("Password saved successfully!", {
+      position: "bottom-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
 
     // 4. Optional: Reset the form fields after a successful save
     setForm({ site: "", username: "", password: "" });
@@ -94,6 +104,22 @@ export const Manager = () => {
     // Copy the text to the clipboard
     navigator.clipboard.writeText(text);
     toast("Copied to Clipboard!", {
+      position: "bottom-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
+  const deletePassword = (index) => {
+    const updatedArray = passwordArray.filter((_, i) => i !== index);
+    setPasswordArray(updatedArray);
+    localStorage.setItem("passwords", JSON.stringify(updatedArray));
+    toast.error("Password deleted successfully!", {
       position: "bottom-left",
       autoClose: 3000,
       hideProgressBar: false,
@@ -212,6 +238,9 @@ export const Manager = () => {
                       <th className="border-collapse border px-5 py-2">
                         Password
                       </th>
+                      <th className="border-collapse border px-5 py-2">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="text-center bg-slate-800 text-gray-300">
@@ -234,7 +263,7 @@ export const Manager = () => {
                                 onClick={() => copyText(item.username)}
                                 className="invert w-6 h-6"
                                 src="https://cdn.lordicon.com/cfkiwvcc.json"
-                                trigger="hover"
+                                trigger="click"
                               ></lord-icon>
                             </div>
                           </td>
@@ -245,9 +274,19 @@ export const Manager = () => {
                                 onClick={() => copyText(item.password)}
                                 className="invert w-6 h-6"
                                 src="https://cdn.lordicon.com/cfkiwvcc.json"
-                                trigger="hover"
+                                trigger="click"
                               ></lord-icon>
                             </div>
+                          </td>
+                          <td className="border-collapse border px-5 py-2">
+                            <lord-icon
+                              className="invert w-6 h-6 cursor-pointer"
+                              src="https://cdn.lordicon.com/oqeixref.json"
+                              trigger="click"
+                              onClick={() => {
+                                deletePassword(index);
+                              }}
+                            ></lord-icon>
                           </td>
                         </tr>
                       );
