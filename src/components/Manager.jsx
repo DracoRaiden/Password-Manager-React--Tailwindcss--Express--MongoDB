@@ -292,6 +292,7 @@ export const Manager = () => {
                             href={item.site}
                             target="_blank"
                             rel="noopener noreferrer"
+                            className="text-blue-400 hover:underline break-all max-w-[75px] overflow-hidden"
                           >
                             {item.site}
                           </a>
@@ -299,7 +300,7 @@ export const Manager = () => {
                         <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
                           <div className="flex items-center justify-center text-[4px] md:text-[12px]">
                             {item.username}
-                            <div className="cursor-pointer ml-2">
+                            <div className="cursor-pointer ml-2 max-w-[75px] overflow-hidden">
                               <lord-icon
                                 onClick={() => copyText(item.username)}
                                 className="invert w-3 h-3 md:w-6 md:h-6"
@@ -309,10 +310,10 @@ export const Manager = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 w-32 md:w-48 max-w-[128px] md:max-w-[192px]">
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 w-32 md:w-48 max-w-[86px] md:max-w-[192px]">
                           <div className="flex items-center justify-center text-[6px] md:text-[12px]">
                             {/* FIX: Use state logic instead of a DOM ref */}
-                            <span>
+                            <span className="max-w-[60px] overflow-hidden">
                               {visiblePasswordIndex === index
                                 ? item.password
                                 : item.password.toString().replace(/./g, "*")}
