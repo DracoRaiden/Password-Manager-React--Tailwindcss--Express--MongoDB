@@ -23,11 +23,16 @@ export const Manager = () => {
     }
   };
 
-  const showPasswordTable = (password) => {
-    savedPasswordRef.current.textContent = password;
-    setTimeout(() => {
+  const showPasswordTable = (password, index) => {
+    if (
+      savedPasswordRef.current.textContent === password &&
+      passwordArray[index].password === password
+    ) {
       savedPasswordRef.current.textContent = password.replace(/./g, "*");
-    }, 3000);
+      return;
+    } else {
+      savedPasswordRef.current.textContent = password;
+    }
   };
 
   const [passwordArray, setPasswordArray] = useState([]);
@@ -175,180 +180,181 @@ export const Manager = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="absolute inset-0 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#002_40%,#63e_100%)]">
-        <div className="mx-auto text-gray-300 bg-slate-900 max-w-3xl py-5 rounded-xl mb-10">
-          <div className="mx-auto flex flex-col items-center gap-2 p-2">
-            <h1 className="font-bold text-4xl">
-              <span className="">&lt;Pass</span>
-              <span className="text-blue-500">OP&gt;</span>
-            </h1>
+      <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#002_40%,#63e_100%)]"></div>
+      <div className=" mx-auto text-gray-300 max-w-3xl py-5 rounded-xl mb-10">
+        <div className="mx-auto flex flex-col items-center gap-2 p-2 mt-10">
+          <h1 className="font-bold text-4xl">
+            <span className="">&lt;Pass</span>
+            <span className="text-blue-500">OP&gt;</span>
+          </h1>
 
-            <p className="text-blue-200 text-lg text-center">
-              Your own Password Manager
-            </p>
-          </div>
-          <div className="flex flex-col py-4 px-8 gap-5">
+          <p className="text-blue-200 text-lg text-center">
+            Your own Password Manager
+          </p>
+        </div>
+        <div className="flex flex-col py-4 px-8 gap-5">
+          <input
+            placeholder="Enter Website URL"
+            value={form.site}
+            onChange={handleChange}
+            className="px-4 py-2 rounded-full border border-blue-600 w-full text-black"
+            type="text"
+            name="site"
+            id=""
+          />
+          <div className="flex mx-auto gap-4 w-full justify-center">
             <input
-              placeholder="Enter Website URL"
-              value={form.site}
+              value={form.username}
               onChange={handleChange}
+              placeholder="Enter Username"
               className="px-4 py-2 rounded-full border border-blue-600 w-full text-black"
               type="text"
-              name="site"
+              name="username"
               id=""
             />
-            <div className="flex mx-auto gap-4 w-full justify-center">
+            <div className="flex items-center gap-2 w-full">
               <input
-                value={form.username}
+                value={form.password}
+                ref={passwordRef}
                 onChange={handleChange}
-                placeholder="Enter Username"
+                placeholder="Enter Password"
                 className="px-4 py-2 rounded-full border border-blue-600 w-full text-black"
-                type="text"
-                name="username"
+                type="password"
+                name="password"
                 id=""
               />
-              <div className="flex items-center gap-2 w-full">
-                <input
-                  value={form.password}
-                  ref={passwordRef}
-                  onChange={handleChange}
-                  placeholder="Enter Password"
-                  className="px-4 py-2 rounded-full border border-blue-600 w-full text-black"
-                  type="password"
-                  name="password"
-                  id=""
-                />
-                <span
-                  className="cursor-pointer hover: scale-110 transition-all duration-300"
-                  onClick={showPassword}
-                >
-                  <lord-icon
-                    src="https://cdn.lordicon.com/dicvhxpz.json"
-                    trigger="hover"
-                    colors="primary:#ffffff,secondary:#3080e8"
-                  ></lord-icon>
-                </span>
-              </div>
+              <span
+                className="cursor-pointer hover: scale-110 transition-all duration-300"
+                onClick={showPassword}
+              >
+                <lord-icon
+                  src="https://cdn.lordicon.com/dicvhxpz.json"
+                  trigger="hover"
+                  colors="primary:#ffffff,secondary:#3080e8"
+                ></lord-icon>
+              </span>
             </div>
           </div>
-          <button
-            onClick={savePassword}
-            disabled={isButtonDisabled}
-            className={`flex items-center gap-2 bg-blue-600 text-gray-200 rounded-full px-6 py-2 mx-auto border-2 border-blue-700 transition-all duration-300 ${
-              isButtonDisabled
-                ? "opacity-70 cursor-not-allowed border-blue-500 bg-blue-500"
-                : "opacity-100 cursor-pointer hover:bg-blue-700 hover:border-blue-800 active:scale-95"
-            }`}
-          >
-            <lord-icon
-              src="https://cdn.lordicon.com/tsrgicte.json"
-              trigger={isButtonDisabled ? "false" : "hover"}
-            ></lord-icon>
-            <span>Add Password</span>
-          </button>
         </div>
-        <div>
-          <div className="mx-auto text-gray-300 bg-slate-900 max-w-4xl py-10 rounded-xl">
-            <h2 className="text-2xl font-bold text-center">Your Passwords</h2>
-            {passwordArray.length === 0 && (
-              <p className="text-center text-gray-400 mt-5">
-                No passwords saved yet. Add some!
-              </p>
-            )}
-            {passwordArray.length !== 0 && (
-              <div className="table-class mx-auto w-3xl px-20 rounded-full mt-5 mb-3 ">
-                <table className="mx-auto w-full border-collapse border rounded-full">
-                  <thead className="bg-blue-900 text-gray-300 rounded-fullborder-collapse border">
-                    <tr className=" text-center ">
-                      <th className="border-collapse border px-5 py-2">
-                        Site URL
-                      </th>
-                      <th className="border-collapse border px-5 py-2">
-                        Username
-                      </th>
-                      <th className="border-collapse border px-5 py-2">
-                        Password
-                      </th>
-                      <th className="border-collapse border px-5 py-2">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-center bg-slate-800 text-gray-300">
-                    {passwordArray.map((item, index) => {
-                      return (
-                        <tr key={index} className="">
-                          <td className="border-collapse border px-5 py-2">
-                            <a
-                              href={item.site}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {item.site}
-                            </a>
-                          </td>
-                          <td className="border-collapse border px-5 py-2">
-                            {item.username}
-                            <div className="cursor-pointer inline-block ml-2">
-                              <lord-icon
-                                onClick={() => copyText(item.username)}
-                                className="invert w-6 h-6"
-                                src="https://cdn.lordicon.com/cfkiwvcc.json"
-                                trigger="click"
-                              ></lord-icon>
-                            </div>
-                          </td>
-                          <td className="border-collapse border px-5 py-2">
-                            <span ref={savedPasswordRef}>
-                              {item.password.toString().replace(/./g, "*")}
-                            </span>
-                            <span
-                              className="cursor-pointer hover: scale-110  transition-all duration-300"
-                              onClick={() => showPasswordTable(item.password)}
-                            >
-                              <lord-icon
-                                src="https://cdn.lordicon.com/dicvhxpz.json"
-                                trigger="hover"
-                                colors="primary:#ffffff,secondary:#3080e8"
-                                className="w-6 h-6 inline-block ml-2"
-                              ></lord-icon>
-                            </span>
-                            <div className="cursor-pointer inline-block ml-2">
-                              <lord-icon
-                                onClick={() => copyText(item.password)}
-                                className="invert w-6 h-6"
-                                src="https://cdn.lordicon.com/cfkiwvcc.json"
-                                trigger="click"
-                              ></lord-icon>
-                            </div>
-                          </td>
-                          <td className="border-collapse border px-5 py-2">
+        <button
+          onClick={savePassword}
+          disabled={isButtonDisabled}
+          className={`flex items-center gap-2 bg-blue-600 text-gray-200 rounded-full px-6 py-2 mx-auto border-2 border-blue-700 transition-all duration-300 ${
+            isButtonDisabled
+              ? "opacity-70 cursor-not-allowed border-blue-500 bg-blue-500"
+              : "opacity-100 cursor-pointer hover:bg-blue-700 hover:border-blue-800 active:scale-95"
+          }`}
+        >
+          <lord-icon
+            src="https://cdn.lordicon.com/tsrgicte.json"
+            trigger={isButtonDisabled ? "false" : "hover"}
+          ></lord-icon>
+          <span>Add Password</span>
+        </button>
+      </div>
+      <div>
+        <div className="mx-auto text-gray-300 bg-slate-900 max-w-4xl py-10 rounded-xl">
+          <h2 className="text-2xl font-bold text-center">Your Passwords</h2>
+          {passwordArray.length === 0 && (
+            <p className="text-center text-gray-400 mt-5">
+              No passwords saved yet. Add some!
+            </p>
+          )}
+          {passwordArray.length !== 0 && (
+            <div className="table-class mx-auto w-3xl px-20 rounded-full mt-5 mb-3 ">
+              <table className="mx-auto w-full border-collapse border rounded-full">
+                <thead className="bg-blue-900 text-gray-300 rounded-fullborder-collapse border">
+                  <tr className=" text-center ">
+                    <th className="border-collapse border px-5 py-2">
+                      Site URL
+                    </th>
+                    <th className="border-collapse border px-5 py-2">
+                      Username
+                    </th>
+                    <th className="border-collapse border px-5 py-2">
+                      Password
+                    </th>
+                    <th className="border-collapse border px-5 py-2">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-center bg-slate-800 text-gray-300">
+                  {passwordArray.map((item, index) => {
+                    return (
+                      <tr key={index} className="">
+                        <td className="border-collapse border px-5 py-2">
+                          <a
+                            href={item.site}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {item.site}
+                          </a>
+                        </td>
+                        <td className="border-collapse border px-5 py-2">
+                          {item.username}
+                          <div className="cursor-pointer inline-block ml-2">
                             <lord-icon
-                              className="invert w-10 h-6 cursor-pointer"
-                              src="https://cdn.lordicon.com/meaqueth.json"
+                              onClick={() => copyText(item.username)}
+                              className="invert w-6 h-6"
+                              src="https://cdn.lordicon.com/cfkiwvcc.json"
                               trigger="click"
-                              onClick={() => {
-                                editPassword(index);
-                              }}
                             ></lord-icon>
+                          </div>
+                        </td>
+                        <td className="border-collapse border px-5 py-2">
+                          <span ref={savedPasswordRef}>
+                            {item.password.toString().replace(/./g, "*")}
+                          </span>
+                          <span
+                            className="cursor-pointer hover: scale-110  transition-all duration-300"
+                            onClick={() =>
+                              showPasswordTable(item.password, index)
+                            }
+                          >
                             <lord-icon
-                              className="invert w-10 h-6 cursor-pointer"
-                              src="https://cdn.lordicon.com/oqeixref.json"
-                              trigger="click"
-                              onClick={() => {
-                                setDel(!del); // Set the deletion state to true before deleting
-                                deletePassword(index);
-                              }}
+                              src="https://cdn.lordicon.com/dicvhxpz.json"
+                              trigger="hover"
+                              colors="primary:#ffffff,secondary:#3080e8"
+                              className="w-6 h-6 inline-block ml-2"
                             ></lord-icon>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                          </span>
+                          <div className="cursor-pointer inline-block ml-2">
+                            <lord-icon
+                              onClick={() => copyText(item.password)}
+                              className="invert w-6 h-6"
+                              src="https://cdn.lordicon.com/cfkiwvcc.json"
+                              trigger="click"
+                            ></lord-icon>
+                          </div>
+                        </td>
+                        <td className="border-collapse border px-5 py-2">
+                          <lord-icon
+                            className="invert w-10 h-6 cursor-pointer"
+                            src="https://cdn.lordicon.com/meaqueth.json"
+                            trigger="click"
+                            onClick={() => {
+                              editPassword(index);
+                            }}
+                          ></lord-icon>
+                          <lord-icon
+                            className="invert w-10 h-6 cursor-pointer"
+                            src="https://cdn.lordicon.com/oqeixref.json"
+                            trigger="click"
+                            onClick={() => {
+                              setDel(!del); // Set the deletion state to true before deleting
+                              deletePassword(index);
+                            }}
+                          ></lord-icon>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

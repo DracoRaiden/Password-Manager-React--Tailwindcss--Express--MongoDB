@@ -27,9 +27,9 @@ export const Navbar = () => {
           <img
             src="../../icons/github.png"
             alt="GitHub"
-            className="invert w-6 h-6"
+            className="invert w-4 h-4 md:w-6 md:h-6"
           />
-          <span className="font-bold">GitHub</span>
+          <span className="font-bold text-xs md:text-xl">GitHub</span>
         </button>
       </div>
     </nav>
