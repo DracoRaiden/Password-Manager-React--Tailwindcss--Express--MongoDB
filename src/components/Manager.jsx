@@ -192,7 +192,7 @@ export const Manager = () => {
             Your own Password Manager
           </p>
         </div>
-        <div className="flex flex-col py-4 px-8 gap-5">
+        <div className="flex flex-col py-4 px-8 gap-5 text-[10px] md:text-base">
           <input
             placeholder="Enter Website URL"
             value={form.site}
@@ -228,6 +228,7 @@ export const Manager = () => {
                 onClick={showPassword}
               >
                 <lord-icon
+                  className="w-6 h-6 md:w-8 md:h-8"
                   src="https://cdn.lordicon.com/dicvhxpz.json"
                   trigger="hover"
                   colors="primary:#ffffff,secondary:#3080e8"
@@ -253,28 +254,30 @@ export const Manager = () => {
         </button>
       </div>
       <div>
-        <div className="mx-auto text-gray-300 bg-slate-900 max-w-4xl py-10 rounded-xl">
-          <h2 className="text-2xl font-bold text-center">Your Passwords</h2>
+        <div className="md:mx-auto mx-10 text-gray-300 bg-slate-900 md:max-w-4xl py-10 rounded-xl flex flex-col items-center">
+          <h2 className="text-xl md:text-2xl font-bold text-center">
+            Your Passwords
+          </h2>
           {passwordArray.length === 0 && (
             <p className="text-center text-gray-400 mt-5">
               No passwords saved yet. Add some!
             </p>
           )}
           {passwordArray.length !== 0 && (
-            <div className="table-class mx-auto w-3xl px-20 rounded-full mt-5 mb-3 ">
-              <table className="mx-auto w-full border-collapse border rounded-full">
-                <thead className="bg-blue-900 text-gray-300 rounded-fullborder-collapse border">
-                  <tr className=" text-center ">
-                    <th className="border-collapse border px-5 py-2">
+            <div className="table-class max-w-xl md:w-3xl md:px-20 rounded-full mt-5 mb-3 mx-5 flex items-center justify-center">
+              <table className="border-collapse border rounded-full ">
+                <thead className="bg-blue-900 text-gray-300 rounded-full border-collapse border">
+                  <tr className=" text-center text-[8px] md:text-[14px]">
+                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
                       Site URL
                     </th>
-                    <th className="border-collapse border px-5 py-2">
+                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
                       Username
                     </th>
-                    <th className="border-collapse border px-5 py-2">
+                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
                       Password
                     </th>
-                    <th className="border-collapse border px-5 py-2">
+                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
                       Actions
                     </th>
                   </tr>
@@ -283,7 +286,7 @@ export const Manager = () => {
                   {passwordArray.map((item, index) => {
                     return (
                       <tr key={index} className="">
-                        <td className="border-collapse border px-5 py-2">
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 text-[4px] md:text-[14px]">
                           <a
                             href={item.site}
                             target="_blank"
@@ -292,61 +295,67 @@ export const Manager = () => {
                             {item.site}
                           </a>
                         </td>
-                        <td className="border-collapse border px-5 py-2">
-                          {item.username}
-                          <div className="cursor-pointer inline-block ml-2">
-                            <lord-icon
-                              onClick={() => copyText(item.username)}
-                              className="invert w-6 h-6"
-                              src="https://cdn.lordicon.com/cfkiwvcc.json"
-                              trigger="click"
-                            ></lord-icon>
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                          <div className="flex items-center justify-center text-[4px] md:text-[14px]">
+                            {item.username}
+                            <div className="cursor-pointer ml-2">
+                              <lord-icon
+                                onClick={() => copyText(item.username)}
+                                className="invert w-3 h-3 md:w-6 md:h-6"
+                                src="https://cdn.lordicon.com/cfkiwvcc.json"
+                                trigger="click"
+                              ></lord-icon>
+                            </div>
                           </div>
                         </td>
-                        <td className="border-collapse border px-5 py-2">
-                          <span ref={savedPasswordRef}>
-                            {item.password.toString().replace(/./g, "*")}
-                          </span>
-                          <span
-                            className="cursor-pointer hover: scale-110  transition-all duration-300"
-                            onClick={() =>
-                              showPasswordTable(item.password, index)
-                            }
-                          >
-                            <lord-icon
-                              src="https://cdn.lordicon.com/dicvhxpz.json"
-                              trigger="hover"
-                              colors="primary:#ffffff,secondary:#3080e8"
-                              className="w-6 h-6 inline-block ml-2"
-                            ></lord-icon>
-                          </span>
-                          <div className="cursor-pointer inline-block ml-2">
-                            <lord-icon
-                              onClick={() => copyText(item.password)}
-                              className="invert w-6 h-6"
-                              src="https://cdn.lordicon.com/cfkiwvcc.json"
-                              trigger="click"
-                            ></lord-icon>
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                          <div className="flex items-center justify-center text-[6px] md:text-[14px]">
+                            <span ref={savedPasswordRef}>
+                              {item.password.toString().replace(/./g, "*")}
+                            </span>
+                            <span
+                              className="cursor-pointer hover:scale-110 transition-all duration-300"
+                              onClick={() =>
+                                showPasswordTable(item.password, index)
+                              }
+                            >
+                              <lord-icon
+                                src="https://cdn.lordicon.com/dicvhxpz.json"
+                                trigger="hover"
+                                colors="primary:#ffffff,secondary:#3080e8"
+                                className="w-2 h-2 md:w-6 md:h-6inline-block ml-2"
+                              ></lord-icon>
+                            </span>
+                            <div className="cursor-pointer inline-block ml-2">
+                              <lord-icon
+                                src="https://cdn.lordicon.com/cfkiwvcc.json"
+                                trigger="click"
+                                onClick={() => copyText(item.password)}
+                                className="invert w-2 h-2 md:w-6 md:h-6"
+                              ></lord-icon>
+                            </div>
                           </div>
                         </td>
-                        <td className="border-collapse border px-5 py-2">
-                          <lord-icon
-                            className="invert w-10 h-6 cursor-pointer"
-                            src="https://cdn.lordicon.com/meaqueth.json"
-                            trigger="click"
-                            onClick={() => {
-                              editPassword(index);
-                            }}
-                          ></lord-icon>
-                          <lord-icon
-                            className="invert w-10 h-6 cursor-pointer"
-                            src="https://cdn.lordicon.com/oqeixref.json"
-                            trigger="click"
-                            onClick={() => {
-                              setDel(!del); // Set the deletion state to true before deleting
-                              deletePassword(index);
-                            }}
-                          ></lord-icon>
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                          <div className="flex items-center justify-center">
+                            <lord-icon
+                              className="invert w-2 h-2 md:w-6 md:h-6 cursor-pointer"
+                              src="https://cdn.lordicon.com/meaqueth.json"
+                              trigger="click"
+                              onClick={() => {
+                                editPassword(index);
+                              }}
+                            ></lord-icon>
+                            <lord-icon
+                              className="invert w-2 h-2 md:w-6 md:h-6 cursor-pointer"
+                              src="https://cdn.lordicon.com/oqeixref.json"
+                              trigger="click"
+                              onClick={() => {
+                                setDel(!del); // Set the deletion state to true before deleting
+                                deletePassword(index);
+                              }}
+                            ></lord-icon>
+                          </div>
                         </td>
                       </tr>
                     );
