@@ -14,6 +14,7 @@ export const Manager = () => {
 
   const passwordRef = useRef(null);
   const savedPasswordRef = useRef(null);
+  const [visiblePasswordIndex, setVisiblePasswordIndex] = useState(null);
 
   const showPassword = () => {
     if (passwordRef.current.type === "password") {
@@ -265,19 +266,19 @@ export const Manager = () => {
           )}
           {passwordArray.length !== 0 && (
             <div className="overflow-y-auto table-class md:px-2 mt-5 mb-3 mx-5 h-24 md:h-48">
-              <table className="border-collapse border w-full">
-                <thead className="bg-blue-900 text-gray-300 border-collapse border sticky top-0 z-10">
+              <table className="w-full border-separate border-spacing-0">
+                <thead className="text-gray-300 sticky top-0 z-10 bg-blue-900">
                   <tr className=" text-center text-[8px] md:text-[14px]">
-                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2 shadow-[bottom_1px_rgba(0,0,0,0.1)]">
+                    <th className="border border-white bg-blue-900 px-2 py-1 md:px-5 md:py-2">
                       Site URL
                     </th>
-                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                    <th className="border border-white bg-blue-900 px-2 py-1 md:px-5 md:py-2">
                       Username
                     </th>
-                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                    <th className="border border-white bg-blue-900 px-2 py-1 md:px-5 md:py-2">
                       Password
                     </th>
-                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                    <th className="border border-white bg-blue-900 px-2 py-1 md:px-5 md:py-2">
                       Actions
                     </th>
                   </tr>
@@ -286,7 +287,7 @@ export const Manager = () => {
                   {passwordArray.map((item, index) => {
                     return (
                       <tr key={index} className="">
-                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 text-[4px] md:text-[14px]">
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 text-[4px] md:text-[12px]">
                           <a
                             href={item.site}
                             target="_blank"
@@ -296,7 +297,7 @@ export const Manager = () => {
                           </a>
                         </td>
                         <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
-                          <div className="flex items-center justify-center text-[4px] md:text-[14px]">
+                          <div className="flex items-center justify-center text-[4px] md:text-[12px]">
                             {item.username}
                             <div className="cursor-pointer ml-2">
                               <lord-icon
@@ -308,16 +309,22 @@ export const Manager = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2">
-                          <div className="flex items-center justify-center text-[6px] md:text-[14px]">
-                            <span ref={savedPasswordRef}>
-                              {item.password.toString().replace(/./g, "*")}
+                        <td className="border-collapse border px-2 py-1 md:px-5 md:py-2 w-32 md:w-48 max-w-[128px] md:max-w-[192px]">
+                          <div className="flex items-center justify-center text-[6px] md:text-[12px]">
+                            {/* FIX: Use state logic instead of a DOM ref */}
+                            <span>
+                              {visiblePasswordIndex === index
+                                ? item.password
+                                : item.password.toString().replace(/./g, "*")}
                             </span>
                             <span
                               className="cursor-pointer hover:scale-110 transition-all duration-300"
-                              onClick={() =>
-                                showPasswordTable(item.password, index)
-                              }
+                              onClick={() => {
+                                // FIX: Toggle the visibility state for this row index
+                                setVisiblePasswordIndex(
+                                  visiblePasswordIndex === index ? null : index,
+                                );
+                              }}
                             >
                               <lord-icon
                                 src="https://cdn.lordicon.com/dicvhxpz.json"
@@ -326,6 +333,7 @@ export const Manager = () => {
                                 className="w-2 h-2 md:w-6 md:h-6 inline-block ml-2"
                               ></lord-icon>
                             </span>
+
                             <div className="cursor-pointer inline-block ml-2">
                               <lord-icon
                                 src="https://cdn.lordicon.com/cfkiwvcc.json"

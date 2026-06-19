@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <div className="relative min-h-[100vh]">
+      <div className="relative min-h-[86vh] md:min-h-[100vh]">
         <Manager />
       </div>
       <Footer />
