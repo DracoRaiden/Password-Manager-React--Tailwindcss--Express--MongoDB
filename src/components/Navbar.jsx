@@ -25,7 +25,7 @@ export const Navbar = () => {
       <div className="w-1/4 flex justify-center">
         <button className="flex items-center gap-2 bg-gray-700 text-gray-200 rounded-full px-4 py-1 hover:bg-gray-600 border-2 border-gray-600 transition-all duration-300">
           <img
-            src="../../public/icons/github.png"
+            src="../../icons/github.png"
             alt="GitHub"
             className="invert w-6 h-6"
           />

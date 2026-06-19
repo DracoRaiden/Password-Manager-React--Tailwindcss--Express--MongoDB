@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 export const Manager = () => {
   const [form, setForm] = useState({
@@ -9,7 +10,10 @@ export const Manager = () => {
     password: "",
   });
 
+  const [del, setDel] = useState(false);
+
   const passwordRef = useRef(null);
+  const savedPasswordRef = useRef(null);
 
   const showPassword = () => {
     if (passwordRef.current.type === "password") {
@@ -17,6 +21,13 @@ export const Manager = () => {
     } else {
       passwordRef.current.type = "password";
     }
+  };
+
+  const showPasswordTable = (password) => {
+    savedPasswordRef.current.textContent = password;
+    setTimeout(() => {
+      savedPasswordRef.current.textContent = password.replace(/./g, "*");
+    }, 3000);
   };
 
   const [passwordArray, setPasswordArray] = useState([]);
@@ -82,7 +93,7 @@ export const Manager = () => {
     }
 
     // 3. Save the unique password entry if no duplicate is found
-    const updatedArray = [...passwordArray, form];
+    const updatedArray = [...passwordArray, { ...form, id: uuidv4() }];
     setPasswordArray(updatedArray);
     localStorage.setItem("passwords", JSON.stringify(updatedArray));
     toast.success("Password saved successfully!", {
@@ -119,16 +130,36 @@ export const Manager = () => {
     const updatedArray = passwordArray.filter((_, i) => i !== index);
     setPasswordArray(updatedArray);
     localStorage.setItem("passwords", JSON.stringify(updatedArray));
-    toast.error("Password deleted successfully!", {
-      position: "bottom-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
+    if (del) {
+      toast.error("Password deleted successfully!", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+      setDel(false); // Reset the deletion state after showing the toast
+    } else {
+      toast.info("Edit password and save again!", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
+  const editPassword = (index) => {
+    const passwordToEdit = passwordArray[index];
+    setForm({ ...passwordToEdit });
+    deletePassword(index); // Remove the old entry so that when we save, it updates instead of creating a duplicate
   };
   return (
     <div className="h-full w-full">
@@ -246,7 +277,7 @@ export const Manager = () => {
                   <tbody className="text-center bg-slate-800 text-gray-300">
                     {passwordArray.map((item, index) => {
                       return (
-                        <tr key={index}>
+                        <tr key={index} className="">
                           <td className="border-collapse border px-5 py-2">
                             <a
                               href={item.site}
@@ -256,7 +287,7 @@ export const Manager = () => {
                               {item.site}
                             </a>
                           </td>
-                          <td className="border-collapse border px-5 py-2 justify-center flex items-center">
+                          <td className="border-collapse border px-5 py-2">
                             {item.username}
                             <div className="cursor-pointer inline-block ml-2">
                               <lord-icon
@@ -268,7 +299,20 @@ export const Manager = () => {
                             </div>
                           </td>
                           <td className="border-collapse border px-5 py-2">
-                            {item.password}
+                            <span ref={savedPasswordRef}>
+                              {item.password.toString().replace(/./g, "*")}
+                            </span>
+                            <span
+                              className="cursor-pointer hover: scale-110  transition-all duration-300"
+                              onClick={() => showPasswordTable(item.password)}
+                            >
+                              <lord-icon
+                                src="https://cdn.lordicon.com/dicvhxpz.json"
+                                trigger="hover"
+                                colors="primary:#ffffff,secondary:#3080e8"
+                                className="w-6 h-6 inline-block ml-2"
+                              ></lord-icon>
+                            </span>
                             <div className="cursor-pointer inline-block ml-2">
                               <lord-icon
                                 onClick={() => copyText(item.password)}
@@ -280,10 +324,19 @@ export const Manager = () => {
                           </td>
                           <td className="border-collapse border px-5 py-2">
                             <lord-icon
-                              className="invert w-6 h-6 cursor-pointer"
+                              className="invert w-10 h-6 cursor-pointer"
+                              src="https://cdn.lordicon.com/meaqueth.json"
+                              trigger="click"
+                              onClick={() => {
+                                editPassword(index);
+                              }}
+                            ></lord-icon>
+                            <lord-icon
+                              className="invert w-10 h-6 cursor-pointer"
                               src="https://cdn.lordicon.com/oqeixref.json"
                               trigger="click"
                               onClick={() => {
+                                setDel(!del); // Set the deletion state to true before deleting
                                 deletePassword(index);
                               }}
                             ></lord-icon>
