@@ -264,11 +264,11 @@ export const Manager = () => {
             </p>
           )}
           {passwordArray.length !== 0 && (
-            <div className="table-class max-w-xl md:w-3xl md:px-20 rounded-full mt-5 mb-3 mx-5 flex items-center justify-center">
-              <table className="border-collapse border rounded-full ">
-                <thead className="bg-blue-900 text-gray-300 rounded-full border-collapse border">
+            <div className="overflow-y-auto table-class md:px-2 mt-5 mb-3 mx-5 h-24 md:h-48">
+              <table className="border-collapse border w-full">
+                <thead className="bg-blue-900 text-gray-300 border-collapse border sticky top-0 z-10">
                   <tr className=" text-center text-[8px] md:text-[14px]">
-                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
+                    <th className="border-collapse border px-2 py-1 md:px-5 md:py-2 shadow-[bottom_1px_rgba(0,0,0,0.1)]">
                       Site URL
                     </th>
                     <th className="border-collapse border px-2 py-1 md:px-5 md:py-2">
@@ -282,7 +282,7 @@ export const Manager = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="text-center bg-slate-800 text-gray-300">
+                <tbody className="text-center text-gray-300 divide-y divide-gray-700">
                   {passwordArray.map((item, index) => {
                     return (
                       <tr key={index} className="">
@@ -323,7 +323,7 @@ export const Manager = () => {
                                 src="https://cdn.lordicon.com/dicvhxpz.json"
                                 trigger="hover"
                                 colors="primary:#ffffff,secondary:#3080e8"
-                                className="w-2 h-2 md:w-6 md:h-6inline-block ml-2"
+                                className="w-2 h-2 md:w-6 md:h-6 inline-block ml-2"
                               ></lord-icon>
                             </span>
                             <div className="cursor-pointer inline-block ml-2">
